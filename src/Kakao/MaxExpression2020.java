@@ -1,46 +1,86 @@
 package Kakao;
 
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.util.*;
+
+
+
+
+/**
+ * 2020 카카오 인턴십
+ * 느낀점 : ArrayList 를 다른 변수에 임의로 저장해놓을 때, addAll 이라는 함수를 통해, 저장하는 것을 배웠다.
+ * iterator로 ArrayList 를 순환해야 하는 것도 배웠다.
+ **/
 
 public class MaxExpression2020 {
-//    /**
-//     * 수식을 stack 에 저장한다.
-//     * stack 을 parameter로 받는 함수를 정의한다.
-//     * 우선순위를 표현하는 6가지의 경우를 배열로 선언한다.
-//     **/
-//
-//    Stack<String> st = new Stack<String>();
-//
-//    public long solution(String expression) {
-//        String str;
-//        StringTokenizer nExpression = new StringTokenizer(expression,"+-*",true);
-//        // 수식 혹은 token 을 stack 에 저장합니다.
-//        while(nExpression.hasMoreTokens()){
-//            str = nExpression.nextToken();
-//            st.push(str);
-//        }
-//
-//        long answer = 0;
-//
-//        return answer;
-//    }
-//
-//    public long solve(Stack<String> st){
-//        while(!st.isEmpty()){
-//
-//            String temp = st.pop();
-//            long tempLong;
-//            if(!temp.equals("+")&&!temp.equals("-")&&!temp.equals("*")){
-//                // TODO 마이너스일 경우 처리해줘야 함.
-//                tempLong = Long.parseLong(temp);
-//
-//            }else{ // 연산자인 경우
-//
-//            }
-//
-//        }
-//
-//
-//    }
+
+    char[][] tokenPriority = {{'+', '-', '*'}, {'+', '*', '-'}, {'-', '*', '+'}, {'-', '+', '*'}, {'*', '+', '-'}, {'*', '-', '+'}};
+    //    char[][] tokenPriority = {{'*', '+', '-'}};
+    List<Long> num = new ArrayList<>();
+    List<Character> token = new ArrayList<>();
+
+    int numCnt = 0;
+    int tokenCnt = 0;
+
+    public long solution(String expression) {
+        long answer = 0;
+        String temp = "";
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            // 수일 경우
+            if (c >= '0' && c <= '9') {
+                temp = temp + Character.toString(c);
+            } else {
+                // 토큰 추가하기
+                token.add(c);
+                // 숫자 추가하기
+                num.add(Long.parseLong(temp));
+                temp = "";
+                continue;
+            }
+            //마지막 수일 때 추가
+            if (i == expression.length() - 1) {
+                num.add(Long.parseLong(temp));
+            }
+        }
+
+
+        long Max = 0;
+        for (char[] chars : tokenPriority) {
+
+            List<Character> tToken = new ArrayList<>();
+            tToken.addAll(token);
+            List<Long> tNum = new ArrayList<>();
+            tNum.addAll(num);
+            for (char tokenP : chars) {
+                for (Iterator<Character> it = tToken.iterator(); it.hasNext(); ) {
+                    char t = it.next();
+                    int k = tToken.indexOf(t);
+                    if (t == tokenP) {
+                        switch (tokenP) {
+                            case '+':
+                                tNum.set(k, tNum.get(k) + tNum.get(k + 1));
+                                tNum.remove(k + 1);
+                                break;
+                            case '*':
+                                tNum.set(k, tNum.get(k) * tNum.get(k + 1));
+                                tNum.remove(k + 1);
+                                break;
+                            case '-':
+                                tNum.set(k, tNum.get(k) - tNum.get(k + 1));
+                                tNum.remove(k + 1);
+                                break;
+                        }
+                        it.remove();
+                    }
+                }
+
+            }
+            if (Max < Math.abs(tNum.get(0))) Max = Math.abs(tNum.get(0));
+        }
+
+
+        answer = Max;
+
+        return answer;
+    }
 }
