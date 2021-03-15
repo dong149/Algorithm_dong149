@@ -5,13 +5,6 @@ import java.util.Map;
 
 public class FindPrimeNum {
 
-
-    public void func(String s,String number){
-        if(number.length() == 0){
-            if()
-        }
-    }
-
     private char[] numbersChar;
     int cnt;
     private Map<String, Integer> map = new HashMap<>();
