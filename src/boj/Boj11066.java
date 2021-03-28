@@ -21,7 +21,7 @@ public class Boj11066 {
             }
             for(int j=0;j<n;j++){
                 for(int k=j+1;k<n;k++){
-                    dp[j][k] =  dp[j][]
+
                 }
             }
 
