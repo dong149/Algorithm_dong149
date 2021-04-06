@@ -1,31 +1,35 @@
 package boj;
 
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 
-// 파일 합치기 문제 다시 풀기
 public class Boj11066 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
         int t = sc.nextInt();
-        for(int i=0;i<t;i++){
+        while (t-- > 0) {
             int n = sc.nextInt();
-            int[] arr = new int[n];
-            int[] sum = new int[n];
-            int[][] dp = new int[n][n];
-            int temp=0;
-            for(int j=0;j<n;j++){
-                arr[i] = sc.nextInt();
-                temp+=arr[i];
-                sum[i] = temp;
+            PriorityQueue<Integer> pq = new PriorityQueue<>();
+            for (int i = 0; i < n; i++) {
+                pq.add(sc.nextInt());
             }
-            for(int j=0;j<n;j++){
-                for(int k=j+1;k<n;k++){
-
+            int sum = 0;
+            while (!pq.isEmpty()) {
+                int temp = pq.poll();
+                int temp2 = 0;
+                if (!pq.isEmpty()) {
+                    temp2 = pq.poll();
+                    sum += temp + temp2;
+                    pq.add(temp + temp2);
+//                    System.out.println(temp+temp2);
+                } else {
+                    break;
                 }
             }
-
+            sb.append(sum).append('\n');
         }
-
+        System.out.print(sb);
     }
 }
