@@ -1,0 +1,43 @@
+package kakao.blind2021;
+
+public class Problem1 {
+
+    public static void main(String[] args) {
+        String test= "123_.def";
+        String res =solution(test);
+        System.out.println(res);
+
+    }
+    public static String solution(String new_id) {
+        String answer = "";
+
+        new_id = new_id.toLowerCase();
+        new_id = new_id.replaceAll("[^a-z0-9\\-_\\.]","");
+        new_id = new_id.replaceAll("\\.+",".");
+        new_id = new_id.replaceAll("^\\.","");
+        new_id = new_id.replaceAll("\\.$","");
+//        System.out.println(new_id);
+        if(new_id.length()==0){
+            new_id+="a";
+        }
+        if(new_id.length()>=16){
+            new_id= new_id.substring(0,15);
+            if(new_id.charAt(new_id.length()-1)=='.'){
+                new_id=new_id.substring(0,14);
+            }
+        }
+//        System.out.println(new_id);
+        Character temp = new_id.charAt(new_id.length()-1);
+        if(new_id.length()<=2){
+            while(true){
+                if(new_id.length()>=3)
+                    break;
+                else{
+                    new_id += temp;
+                }
+            }
+        }
+        answer = new_id;
+        return answer;
+    }
+}
