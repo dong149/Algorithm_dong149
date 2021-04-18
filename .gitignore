@@ -2,8 +2,8 @@
 
 */.idea
 /out/
-
-
+.idea
+algorithm.iml
 ### Java ###
 # Compiled class file
 *.class
