@@ -1,10 +1,10 @@
-//package boj;
-//
-//import java.util.LinkedList;
-//import java.util.Queue;
-//import java.util.Scanner;
-//
-//public class Boj11559 {
+package boj;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Boj11559 {
 //
 //    static char[][] map = new char[12][6];
 //    static int[] dx = {0, 0, 1, -1};
@@ -99,4 +99,4 @@
 //            }
 //        }
 //    }
-//}
+}
