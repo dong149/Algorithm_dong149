@@ -1,55 +1,86 @@
 package kakao.intern2020;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Problem2 {
     public static void main(String[] args) {
-        solution("100-200*300-500+20");
+        long answer = solution("50*300");
+        System.out.println(answer);
+
     }
 
-    static String[] Pr = {"+-*","+*-","-+*","-*+","*-+","*+-"};
-
+    static String[] Pr = {"-+*","+-*","+*-","-*+","*-+","*+-"};
     public static long solution(String expression) {
         long answer = 0;
-        Pattern p = Pattern.compile("(\\b[0-9]+\\b)|(\\b[-+*]\\b)");
-        ArrayList<String> arr = new ArrayList<>();
-        Matcher ma = p.matcher(expression);
-        while(ma.find()){
-            arr.add(ma.group());
+
+        ArrayList<Long> numList = new ArrayList<>();
+        ArrayList<Character> opList = new ArrayList<>();
+
+        StringTokenizer st = new StringTokenizer(expression,"-*+",true);
+
+        while(st.hasMoreTokens()){
+            String cur = st.nextToken();
+            if(cur.matches("[-*+]")){
+                opList.add(cur.charAt(0));
+            }else{
+                numList.add(Long.parseLong(cur));
+            }
         }
-        ArrayList<String> temp = new ArrayList<>(arr);
-        for(int i=0;i<Pr.length;i++){
-            arr=new ArrayList<>(temp);
-            for(int j=0;j<3;j++){
-                char cur = Pr[i].charAt(j);
-                ArrayList<String> tempArr = new ArrayList<>();
-                for(int k=0;k<arr.size();k++){
-                    if(arr.get(k).matches("-?[0-9]+")){
-                        tempArr.add(arr.get(k));
-                    }else{
-                        if(arr.get(k).charAt(0)==cur){
-                            if(cur=='*'){
-                                tempArr.set(tempArr.size()-1,String.valueOf(Long.parseLong(tempArr.get(tempArr.size()-1))*Long.parseLong(arr.get(k+1))));
-                            }else if(cur=='+'){
-                                tempArr.set(tempArr.size()-1,String.valueOf(Long.parseLong(tempArr.get(tempArr.size()-1))+Long.parseLong(arr.get(k+1))));
-                            }else{
-                                tempArr.set(tempArr.size()-1,String.valueOf(Long.parseLong(tempArr.get(tempArr.size()-1))-Long.parseLong(arr.get(k+1))));
-                            }
-                            k++;
-                        }else{
-                            tempArr.add(arr.get(k));
+
+        ArrayList<Long> numLi;
+        ArrayList<Character> opLi;
+        for(String pr:Pr){
+            numLi = new ArrayList<>();
+            opLi = new ArrayList<>();
+            numLi.addAll(numList);
+            opLi.addAll(opList);
+            for(int i=0;i<3;i++){
+                ArrayList<Long> numTemp = new ArrayList<>();
+                ArrayList<Character> opTemp = new ArrayList<>();
+                char op = pr.charAt(i);
+                numTemp.add(numLi.get(0));
+                int numIdx=1;
+                for(int opIdx=0;opIdx<opLi.size();opIdx++) {
+                    if (opLi.get(opIdx) == op) {
+                        long top = numTemp.get(numTemp.size() - 1);
+                        long next = numLi.get(numIdx);
+                        long res=0;
+                        if (op == '*') {
+                            res = top * next;
+                        } else if (op == '+') {
+                            res = top + next;
+                        } else {
+                            res = top - next;
                         }
+//                        System.out.println(res);
+                        //-100
+                        numTemp.set(numTemp.size() - 1, res);
+                        numIdx++;
+                    } else {
+                        opTemp.add(opLi.get(opIdx));
+                        numTemp.add(numLi.get(numIdx));
+                        numIdx++;
                     }
                 }
-                arr = new ArrayList<>(tempArr);
+                numLi = new ArrayList<>();
+                opLi = new ArrayList<>();
+                numLi.addAll(numTemp);
+                opLi.addAll(opTemp);
             }
-            answer = Math.max(Math.abs(Long.parseLong(arr.get(0))),answer);
-
-
+            answer = Math.max(answer,Math.abs(numLi.get(0)));
         }
+
+
+
+
+
+
         return answer;
     }
+
 
 }
